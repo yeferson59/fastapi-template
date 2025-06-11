@@ -68,5 +68,9 @@ USER appuser
 # Expose dynamic port
 EXPOSE $PORT
 
+# Healthcheck with dynamic port
+HEALTHCHECK --interval=60s --timeout=10s --start-period=20s --retries=5 \
+    CMD python -c "import requests, os; requests.get(f'http://localhost:{os.getenv(\"PORT\", 8000)}/health')" || exit 1
+
 # Default command optimized with environment variables in JSON format
 CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers $WORKERS --log-level $LOG_LEVEL"]
