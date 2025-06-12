@@ -8,3 +8,11 @@ wheels/
 
 # Virtual environments
 .venv
+.env
+.env.production
+.env.local
+.env.test
+
+#dabase files
+*.db
+*.sqlite3
