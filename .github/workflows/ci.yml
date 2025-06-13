@@ -40,7 +40,5 @@ jobs:
           uv run isort --check-only .
 
       - name: Run tests with pytest
-        env:
-          PYTHONPATH: .
         run: |
-          pytest
+          uv run pytest
