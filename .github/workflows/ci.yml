@@ -29,15 +29,15 @@ jobs:
 
       - name: Lint with ruff
         run: |
-          ruff check . --fix
+          uv run ruff check . --fix
 
       - name: Check formatting with black
         run: |
-          black --check .
+          uv run black --check .
 
       - name: Check imports with isort
         run: |
-          isort --check-only .
+          uv run isort --check-only .
 
       - name: Run tests with pytest
         env:
