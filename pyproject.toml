@@ -1,8 +1,27 @@
 [project]
-name = "simple-api"
+name = "fastapi-starter-template"
 version = "0.1.0"
-description = "Add your description here"
+description = "A professional FastAPI starter template with a scalable structure, Docker support, and best practices for modern API development and deployment."
 readme = "README.md"
+authors = [{ name = "Yeferson Toloza", email = "yefersontoloza59@gmail.com" }]
+license = { file = "LICENSE" }
+keywords = [
+  "fastapi",
+  "template",
+  "starter",
+  "sqlmodel",
+  "docker",
+  "api",
+  "python",
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Framework :: FastAPI",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "License :: OSI Approved :: MIT License",
+  "Topic :: Software Development :: Libraries :: Application Frameworks",
+]
 requires-python = ">=3.13"
 dependencies = [
   "fastapi[all]>=0.115.12",
