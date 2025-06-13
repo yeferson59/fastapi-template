@@ -1,15 +1,11 @@
-from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union
+from typing import Any, Generic, TypeVar
+
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
-from sqlmodel import Session, select, SQLModel, Field
-from fastapi import Depends
-from typing import Annotated
-from app.db.session import get_db
+from sqlmodel import select
 
-SessionDep = Annotated[Session, Depends(get_db)]
-
-class SQLModelWithId(SQLModel):
-    id: Any = Field(default=None, primary_key=True)
+from app.api.deps import SessionDep
+from app.core.models import SQLModelWithId
 
 ModelType = TypeVar("ModelType", bound=SQLModelWithId)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
@@ -17,7 +13,7 @@ UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
 
 
 class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
-    def __init__(self, model: Type[ModelType]):
+    def __init__(self, model: type[ModelType]):
         """
         CRUD object with default methods to Create, Read, Update, Delete (CRUD).
         **Parameters**
@@ -26,14 +22,14 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         """
         self.model = model
 
-    def get(self, db: SessionDep, id: Any) -> Optional[ModelType]:
+    def get(self, db: SessionDep, obj_id: Any) -> ModelType | None:
         """Obtener un registro por ID"""
-        statement = select(self.model).where(self.model.id == id)
+        statement = select(self.model).where(self.model.id == obj_id)
         return db.exec(statement).first()
 
     def get_multi(
         self, db: SessionDep, skip: int = 0, limit: int = 100
-    ) -> List[ModelType]:
+    ) -> list[ModelType]:
         """Obtener múltiples registros con paginación"""
         statement = select(self.model).offset(skip).limit(limit)
         return list(db.exec(statement).all())
@@ -52,7 +48,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db: SessionDep,
         *,
         db_obj: ModelType,
-        obj_in: Union[UpdateSchemaType, Dict[str, Any]]
+        obj_in: UpdateSchemaType | dict[str, Any],
     ) -> ModelType:
         """Actualizar un registro existente"""
         obj_data = jsonable_encoder(db_obj)
@@ -70,9 +66,9 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db.refresh(db_obj)
         return db_obj
 
-    def remove(self, db: SessionDep, *, id: int) -> Optional[ModelType]:
+    def remove(self, db: SessionDep, *, obj_id: int) -> ModelType | None:
         """Eliminar un registro por ID"""
-        statement = select(self.model).where(self.model.id == id)
+        statement = select(self.model).where(self.model.id == obj_id)
         obj = db.exec(statement).first()
         if obj:
             db.delete(obj)
@@ -84,7 +80,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         statement = select(self.model)
         return len(list(db.exec(statement).all()))
 
-    def exists(self, db: SessionDep, id: Any) -> bool:
+    def exists(self, db: SessionDep, obj_id: Any) -> bool:
         """Verificar si existe un registro por ID"""
-        statement = select(self.model).where(self.model.id == id)
+        statement = select(self.model).where(self.model.id == obj_id)
         return db.exec(statement).first() is not None
