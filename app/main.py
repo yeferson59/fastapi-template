@@ -1,16 +1,20 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 
 from app.api.v1.api import api_router
 from app.core.config import get_full_api_prefix
 from app.db.base import init_db
 
-app = FastAPI()
-prefix = get_full_api_prefix()
 
-
-@app.on_event("startup")
-def on_startup():
+@asynccontextmanager
+async def lifespan(app: FastAPI):  # noqa: ARG001
     init_db()
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
+prefix = get_full_api_prefix()
 
 
 @app.get("/health")
