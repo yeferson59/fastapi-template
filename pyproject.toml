@@ -31,3 +31,47 @@ dependencies = [
   "bcrypt<4.0",
   "sqlalchemy-libsql>=0.2.0",
 ]
+
+[dependency-groups]
+dev = ["black>=24.0.0", "ruff>=0.3.0", "isort>=5.12.0", "pre-commit>=3.7.0"]
+
+[tool.black]
+line-length = 88
+target-version = ["py311", "py312", "py313"]
+skip-string-normalization = false
+
+[tool.isort]
+profile = "black"
+line_length = 88
+multi_line_output = 3
+include_trailing_comma = true
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+exclude = ["alembic", ".venv", "tests"]
+fix = true
+
+[tool.ruff.lint]
+select = [
+  "E",
+  "F",
+  "W",
+  "I",
+  "C90",
+  "N",
+  "UP",
+  "B",
+  "A",
+  "C4",
+  "DTZ",
+  "PIE",
+  "PT",
+  "RET",
+  "SIM",
+  "TID",
+  "ARG",
+  "PL",
+  "RUF",
+]
+ignore = []
