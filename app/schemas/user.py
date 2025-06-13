@@ -1,11 +1,11 @@
-from typing import Optional
 from pydantic import BaseModel, EmailStr
 
+
 class UserBase(BaseModel):
-    email: Optional[EmailStr] = None
-    is_active: Optional[bool] = True
-    is_superuser: Optional[bool] = False
-    full_name: Optional[str] = None
+    email: EmailStr | None = None
+    is_active: bool | None = True
+    is_superuser: bool | None = False
+    full_name: str | None = None
 
 
 class UserCreate(UserBase):
@@ -13,19 +13,13 @@ class UserCreate(UserBase):
 
 
 class UserUpdate(UserBase):
-    password: Optional[str] = None
+    password: str | None = None
 
 
 class UserInDBBase(UserBase):
-    id: Optional[int] = None
+    id: int | None = None
 
-    model_config = {
-        "from_attributes": True
-    }
-
-
-class User(UserInDBBase):
-    pass
+    model_config = {"from_attributes": True}
 
 
 class UserInDB(UserInDBBase):
