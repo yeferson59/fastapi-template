@@ -1,5 +1,7 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
 from functools import lru_cache
+
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
 
 class Settings(BaseSettings):
     app_name: str = "FastAPI Project"
@@ -13,13 +15,17 @@ class Settings(BaseSettings):
     environment: str = "development"
     turso_auth_token: str = "your-auth-token"
 
-    model_config = SettingsConfigDict(env_file=('.env', '.env.*'), env_file_encoding='utf-8')
+    model_config = SettingsConfigDict(
+        env_file=(".env", ".env.*"), env_file_encoding="utf-8"
+    )
 
-@lru_cache()
+
+@lru_cache
 def get_settings():
     return Settings()
 
-@lru_cache()
+
+@lru_cache
 def get_full_api_prefix() -> str:
     settings = get_settings()
     return f"{settings.api_prefix}/{settings.api_version}"
