@@ -1,32 +1,33 @@
-from typing import Any, List
 from fastapi import APIRouter, HTTPException
-from app.crud import crud_user
+
 from app.api.deps import SessionDep
-from app.models.user import User as user_model
-from app.schemas.user import User, UserCreate, UserUpdate
+from app.crud import crud_user
+from app.models.user import User
+from app.schemas.user import UserCreate, UserUpdate
 
 router = APIRouter()
 
-user_crud = crud_user.CRUDUser(user_model)
+user_crud = crud_user.CRUDUser(User)
 
-@router.get("/", response_model=List[User])
+
+@router.get("/", response_model=list[User])
 def read_users(
     db: SessionDep,
     skip: int = 0,
     limit: int = 100,
-) -> Any:
+) -> list[User]:
     """
     Retrieve users.
     """
-    users = user_crud.get_multi(db=db, skip=skip, limit=limit)
-    return users
+    return user_crud.get_multi(db=db, skip=skip, limit=limit)
+
 
 @router.post("/", response_model=User)
 def create_user(
     *,
     db: SessionDep,
     user_in: UserCreate,
-) -> Any:
+) -> User:
     """
     Create new user.
     """
@@ -41,36 +42,37 @@ def create_user(
             status_code=400,
             detail="The user with this username already exists in the system.",
         )
-    user = user_crud.create(db, obj_in=user_in)
-    return user
+    return user_crud.create(db, obj_in=user_in)
 
-@router.get("/search/{search_term}", response_model=List[User])
+
+@router.get("/search/{search_term}", response_model=list[User])
 def search_users(
     search_term: str,
     db: SessionDep,
     skip: int = 0,
     limit: int = 100,
-) -> Any:
+) -> list[User]:
     """
     Search users by name or email.
     """
-    users = user_crud.search_by_name_or_email(
+    return user_crud.search_by_name_or_email(
         db, search_term=search_term, skip=skip, limit=limit
     )
-    return users
+
 
 @router.get("/{user_id}", response_model=User)
 def read_user_by_id(
     user_id: int,
     db: SessionDep,
-) -> Any:
+) -> User:
     """
     Get a specific user by id.
     """
-    user = user_crud.get(db, id=user_id)
+    user = user_crud.get(db, obj_id=user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user
+
 
 @router.put("/{user_id}", response_model=User)
 def update_user(
@@ -78,27 +80,26 @@ def update_user(
     db: SessionDep,
     user_id: int,
     user_in: UserUpdate,
-) -> Any:
+) -> User:
     """
     Update an user.
     """
-    db_user = user_crud.get(db, id=user_id)
+    db_user = user_crud.get(db, obj_id=user_id)
     if not db_user:
         raise HTTPException(status_code=404, detail="User not found")
-    user = user_crud.update(db, db_obj=db_user, obj_in=user_in)
-    return user
+    return user_crud.update(db, db_obj=db_user, obj_in=user_in)
+
 
 @router.delete("/{user_id}", response_model=User)
 def delete_user(
     *,
     db: SessionDep,
     user_id: int,
-) -> Any:
+) -> User | None:
     """
     Delete an user.
     """
-    db_user = user_crud.get(db, id=user_id)
+    db_user = user_crud.get(db, obj_id=user_id)
     if not db_user:
         raise HTTPException(status_code=404, detail="User not found")
-    user = user_crud.remove(db, id=user_id)
-    return user
+    return user_crud.remove(db, obj_id=user_id)
