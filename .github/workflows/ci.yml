@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install uv (fast Python package manager)
+        run: |
+          pip install uv
+
+      - name: Install dependencies (including dev)
+        run: |
+          uv sync --dev --no-cache
+
+      - name: Lint with ruff
+        run: |
+          ruff check . --fix
+
+      - name: Check formatting with black
+        run: |
+          black --check .
+
+      - name: Check imports with isort
+        run: |
+          isort --check-only .
+
+      - name: Run tests with pytest
+        env:
+          PYTHONPATH: .
+        run: |
+          pytest
