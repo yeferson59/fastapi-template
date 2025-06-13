@@ -1,12 +1,12 @@
-from typing import Optional
 from sqlmodel import Field, SQLModel
-from app.crud.base import SQLModelWithId
+
+from app.core.models import SQLModelWithId
 
 
 class User(SQLModelWithId, SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     email: str = Field(unique=True, index=True)
     is_active: bool = Field(default=True)
     is_superuser: bool = Field(default=False)
-    full_name: Optional[str] = None
+    full_name: str | None = None
     password: str = Field()
