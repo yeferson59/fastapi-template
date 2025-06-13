@@ -1,6 +1,7 @@
+from fastapi import Depends
+from typing import Annotated
 from sqlmodel import Session
-from app.db.base import engine
+from app.db.session import get_db
 
-def session_local():
-    with Session(engine) as session:
-        yield session
+
+SessionDep = Annotated[Session, Depends(get_db)]
