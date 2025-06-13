@@ -52,8 +52,8 @@ simple-api/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/your-fastapi-template.git
-cd your-fastapi-template/simple-api
+git clone https://github.com/yeferson59/fastapi-template.git
+cd fastapi-template
 ```
 
 ### 2. Create and activate a virtual environment
