@@ -1,5 +1,7 @@
 # FastAPI Professional Starter Template
 
+[![CI](https://github.com/yeferson59/fastapi-template/actions/workflows/ci.yml/badge.svg)](https://github.com/yeferson59/fastapi-template/actions/workflows/ci.yml)
+
 A modern, production-ready template for building robust APIs with [FastAPI](https://fastapi.tiangolo.com/), SQLModel, and Docker. This project provides a clean, scalable structure, best practices, and batteries-included features to help you start your next Python web project quickly and efficiently.
 
 ---
@@ -52,8 +54,8 @@ simple-api/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yeferson59/fastapi-template.git
-cd fastapi-template
+git clone https://github.com/your-username/your-fastapi-template.git
+cd your-fastapi-template/simple-api
 ```
 
 ### 2. Create and activate a virtual environment
@@ -69,11 +71,10 @@ This template uses [uv](https://github.com/astral-sh/uv) for fast dependency man
 
 ```bash
 # With uv (recommended)
-uv pip install -r uv.lock
-
+uv sync --dev
 # Or with pip (if you prefer)
 pip install -U pip
-pip install -r requirements.txt  # Or use pip install . if you have a requirements.txt
+pip install .[dev]
 ```
 
 ### 4. Configure environment variables
@@ -87,7 +88,14 @@ cp .env.example .env
 ### 5. Run the application
 
 ```bash
-uvicorn app.main:app --reload
+# With uv development (recommended)
+uv run fastapi dev app/main.py
+
+# Or with uvicorn directly
+# uvicorn app.main:app --reload
+
+# With uv for production
+uv run fastapi run app/main.py
 ```
 
 The API will be available at [http://localhost:8000](http://localhost:8000).
@@ -95,6 +103,48 @@ The API will be available at [http://localhost:8000](http://localhost:8000).
 ### 6. Explore the API docs
 
 Visit [http://localhost:8000/docs](http://localhost:8000/docs) for the interactive Swagger UI.
+
+---
+
+## Development Workflow
+
+### Linting & Formatting
+
+- **Lint:**
+  ```bash
+  ruff check . --fix
+  ```
+- **Format:**
+  ```bash
+  black .
+  ```
+- **Sort imports:**
+  ```bash
+  isort .
+  ```
+
+### Pre-commit Hooks
+
+This template includes a `.pre-commit-config.yaml` for automatic linting and formatting before every commit.
+To enable:
+
+```bash
+pre-commit install
+```
+
+### Running Tests
+
+Tests are located in the `tests/` directory and use `pytest` and FastAPI's `TestClient`.
+
+```bash
+pytest
+```
+
+You can also run all pre-commit hooks manually:
+
+```bash
+pre-commit run --all-files
+```
 
 ---
 
@@ -111,6 +161,21 @@ Visit [http://localhost:8000/docs](http://localhost:8000/docs) for the interacti
 
 ---
 
+## Continuous Integration (CI)
+
+This template includes a GitHub Actions workflow for CI/CD:
+
+- Runs on every push and pull request to `main` or `master`
+- Installs dependencies (including dev tools)
+- Runs linting (ruff), formatting checks (black), import sorting (isort)
+- Runs all tests with pytest
+
+You can find the workflow at `.github/workflows/ci.yml`.
+
+> **Important:**
+> The CI/CD and all development commands assume you have installed the dev dependencies group (`.[dev]`).
+
+---
 ## Configuration
 
 All configuration is managed via environment variables. See `.env.example` for available options:
