@@ -1,8 +1,10 @@
 # app/db/init_db.py
 
 from app.db.base import init_db
+
 # Importa aquí tus modelos si necesitas crear datos iniciales (seed)
 # from app.models.user import User
+
 
 def initialize():
     """
