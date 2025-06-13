@@ -17,7 +17,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
 
     def create(self, db: SessionDep, *, obj_in: UserCreate) -> User:
         """Crear nuevo usuario con password hasheado"""
-        obj_in_data = obj_in.dict(exclude_unset=True)
+        obj_in_data = obj_in.model_dump(exclude_unset=True)
         obj_in_data["password"] = get_password_hash(obj_in_data.pop("password"))
         db_obj = User(**obj_in_data)
         db.add(db_obj)
@@ -32,7 +32,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         if isinstance(obj_in, dict):
             update_data = obj_in
         else:
-            update_data = obj_in.dict(exclude_unset=True)
+            update_data = obj_in.model_dump(exclude_unset=True)
 
         if "password" in update_data:
             update_data["hashed_password"] = get_password_hash(
