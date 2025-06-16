@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     port: int = 8000
     environment: str = "development"
     turso_auth_token: str = "your-auth-token"
+    is_turso: bool = False
 
     model_config = SettingsConfigDict(
         env_file=(".env", ".env.*"), env_file_encoding="utf-8"
