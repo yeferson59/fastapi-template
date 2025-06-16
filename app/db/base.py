@@ -4,12 +4,13 @@ from app.core.config import get_settings
 
 settings = get_settings()
 
-connect_args = {"check_same_thread": False, "auth_token": settings.turso_auth_token}
+connect_args = {"check_same_thread": False}
 
 database_url = settings.database_url
 
 if settings.is_turso:
     database_url = f"sqlite+{settings.database_url}?secure=true"
+    connect_args = {"check_same_thread": False, "auth_token": settings.turso_auth_token}
 
 engine = create_engine(
     database_url,
