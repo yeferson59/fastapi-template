@@ -54,8 +54,8 @@ simple-api/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/your-fastapi-template.git
-cd your-fastapi-template/simple-api
+git clone https://github.com/yeferson59/fastapi-template.git
+cd fastapi-template
 ```
 
 ### 2. Create and activate a virtual environment
@@ -92,7 +92,7 @@ cp .env.example .env
 uv run fastapi dev app/main.py
 
 # Or with uvicorn directly
-# uvicorn app.main:app --reload
+# uv run uvicorn app.main:app --reload
 
 # With uv for production
 uv run fastapi run app/main.py
