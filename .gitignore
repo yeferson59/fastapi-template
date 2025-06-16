@@ -16,3 +16,6 @@ wheels/
 #dabase files
 *.db
 *.sqlite3
+
+# System files
+.DS_Store
