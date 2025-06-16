@@ -1,11 +1,14 @@
 import os
 import sys
 
+# Asegura que el directorio raíz esté en sys.path antes de importar app
+root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if root_path not in sys.path:
+    sys.path.insert(0, root_path)
+
 import pytest
 
 from app.db.base import init_db
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 
 @pytest.fixture(scope="session", autouse=True)
