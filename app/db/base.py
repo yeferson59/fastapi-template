@@ -6,8 +6,13 @@ settings = get_settings()
 
 connect_args = {"check_same_thread": False, "auth_token": settings.turso_auth_token}
 
+database_url = settings.database_url
+
+if settings.is_turso:
+    database_url = f"sqlite+{settings.database_url}?secure=true"
+
 engine = create_engine(
-    f"sqlite+{settings.database_url}?secure=true",
+    database_url,
     pool_pre_ping=True,
     echo=settings.debug,
     connect_args=connect_args,
