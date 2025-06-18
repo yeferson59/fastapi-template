@@ -20,7 +20,7 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v6
         with:
-          python-version: ".python-version"
+          python-version: "3.13"
           version: "0.7.13"
           enable-cache: true
           cache-dependency-glob: "uv.lock"
