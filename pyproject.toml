@@ -34,11 +34,12 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "black>=24.0.0",
- "ruff>=0.3.0",
- "isort>=5.12.0",
- "pre-commit>=3.7.0",
- "pytest>=8.4.0",
+  "black>=24.0.0",
+  "ruff>=0.3.0",
+  "isort>=5.12.0",
+  "pre-commit>=3.7.0",
+  "pytest>=8.4.0",
+  "mypy>=1.16.1",
 ]
 
 [tool.black]
@@ -81,3 +82,11 @@ select = [
   "RUF",
 ]
 ignore = []
+
+[tool.mypy]
+python_version = "3.13"
+check_untyped_defs = true
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unused_configs = true
