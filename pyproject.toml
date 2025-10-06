@@ -83,7 +83,8 @@ select = [
 ]
 ignore = []
 
-[tool.mypy]
+[tool.zuban]
+python_executable=".venv/bin/python"
 python_version = "3.13"
 check_untyped_defs = true
 ignore_missing_imports = true
