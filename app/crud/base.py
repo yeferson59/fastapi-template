@@ -54,11 +54,8 @@ class CRUDBase[ModelType, CreateSchemaType, UpdateSchemaType]:
         obj_data = jsonable_encoder(db_obj)
         if isinstance(obj_in, dict):
             update_data = obj_in
-        # Handle both Pydantic v1 (dict) and v2 (model_dump)
-        elif hasattr(obj_in, "model_dump"):
-            update_data = obj_in.model_dump(exclude_unset=True)
         else:
-            update_data = obj_in.dict(exclude_unset=True)  # type: ignore[attr-defined]
+            update_data = obj_in.model_dump(exclude_unset=True)  # type: ignore[attr-defined]
 
         for field in obj_data:
             if field in update_data:
