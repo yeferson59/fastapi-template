@@ -44,7 +44,7 @@ dev = [
 
 [tool.black]
 line-length = 88
-target-version = ["py311", "py312", "py313"]
+target-version = ["py313"]
 skip-string-normalization = false
 
 [tool.isort]
@@ -55,7 +55,7 @@ include_trailing_comma = true
 
 [tool.ruff]
 line-length = 88
-target-version = "py311"
+target-version = "py313"
 exclude = ["alembic", ".venv", "tests"]
 fix = true
 
