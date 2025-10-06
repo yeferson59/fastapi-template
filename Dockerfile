@@ -1,5 +1,5 @@
 # Optimized multi-stage build for FastAPI with UV
-FROM python:3.13.3-alpine3.20 AS base
+FROM python:3.13.7-alpine3.21 AS base
 
 # Common environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
