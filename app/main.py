@@ -9,7 +9,7 @@ from app.db.base import init_db
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):  # noqa: ARG001
+async def lifespan(_app: FastAPI):
     init_db()
     yield
 
