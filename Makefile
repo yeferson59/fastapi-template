@@ -19,7 +19,7 @@ lint-format:
 	$(UV) ruff check . --fix
 	$(UV) black --check .
 	$(UV) isort --check-only .
-	$(UV) mypy .
+	$(UV) zuban mypy --warn-unreachable
 
 test:
 	$(UV) pytest

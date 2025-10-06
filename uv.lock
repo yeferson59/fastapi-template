@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.13"
 
 [[package]]
@@ -227,6 +227,7 @@ dev = [
     { name = "pre-commit" },
     { name = "pytest" },
     { name = "ruff" },
+    { name = "zuban" },
 ]
 
 [package.metadata]
@@ -247,6 +248,7 @@ dev = [
     { name = "pre-commit", specifier = ">=3.7.0" },
     { name = "pytest", specifier = ">=8.4.0" },
     { name = "ruff", specifier = ">=0.3.0" },
+    { name = "zuban", specifier = ">=0.0.24" },
 ]
 
 [[package]]
@@ -994,4 +996,19 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/86/eb/20b6cdf273913d0ad05a6a14aed4b9a85591c18a987a3d47f20fa13dcc47/websockets-15.0.1-cp313-cp313-win32.whl", hash = "sha256:ba9e56e8ceeeedb2e080147ba85ffcd5cd0711b89576b83784d8605a7df455fa", size = 176393, upload-time = "2025-03-05T20:02:53.814Z" },
     { url = "https://files.pythonhosted.org/packages/1b/6c/c65773d6cab416a64d191d6ee8a8b1c68a09970ea6909d16965d26bfed1e/websockets-15.0.1-cp313-cp313-win_amd64.whl", hash = "sha256:e09473f095a819042ecb2ab9465aee615bd9c2028e4ef7d933600a8401c79561", size = 176837, upload-time = "2025-03-05T20:02:55.237Z" },
     { url = "https://files.pythonhosted.org/packages/fa/a8/5b41e0da817d64113292ab1f8247140aac61cbf6cfd085d6a0fa77f4984f/websockets-15.0.1-py3-none-any.whl", hash = "sha256:f7a866fbc1e97b5c617ee4116daaa09b722101d4a3c170c787450ba409f9736f", size = 169743, upload-time = "2025-03-05T20:03:39.41Z" },
+]
+
+[[package]]
+name = "zuban"
+version = "0.0.24"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/95/c5/ee439cd9c4ecb1dd20639928cc0ba6516c55af6d516aedd78aa993b1f455/zuban-0.0.24-py3-none-macosx_10_12_x86_64.whl", hash = "sha256:5d50085686be69c3cde97d58a83c56b16a6a9cb97206a6707243dd49fa1b78b9", size = 9443734, upload-time = "2025-09-23T12:10:02.043Z" },
+    { url = "https://files.pythonhosted.org/packages/92/b8/c543a3a31f04e7e2c305ed20b5b034fceb0ac42053864ba8e457aedeeb46/zuban-0.0.24-py3-none-macosx_11_0_arm64.whl", hash = "sha256:d53c9f954905396d7841b4cdb2aff43a079695d10bf93bf614ad353f7556fab0", size = 9119256, upload-time = "2025-09-23T12:10:04.569Z" },
+    { url = "https://files.pythonhosted.org/packages/73/a5/3c570dab20a28cb974f918c74c6a5e2742bce3bf328340974a955a7f3766/zuban-0.0.24-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:28e76feed159631c4733a9297d8b86cae124e754c6d68c615994ceeb4d966780", size = 23702655, upload-time = "2025-09-23T12:10:07.259Z" },
+    { url = "https://files.pythonhosted.org/packages/db/d8/842ee6bcd33aef6e10db82c973e413b7bcd3fcaeb2bb3dca0e6370b4ff66/zuban-0.0.24-py3-none-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:8cff03602aec1f1b125316685183911260c6927211b80b598ac9766db50c4aa0", size = 23405094, upload-time = "2025-09-23T12:10:10.305Z" },
+    { url = "https://files.pythonhosted.org/packages/f5/45/1e79cac4bb1a576c1363aa415e0bcc9fc09d35236cc112ec1078a7fa81e4/zuban-0.0.24-py3-none-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:44d476970b20778700fa4ae56112226b2ed4c192bba6c43f70c305c4d8bb15b6", size = 24341281, upload-time = "2025-09-23T12:10:13.287Z" },
+    { url = "https://files.pythonhosted.org/packages/6f/aa/8fcb1cf45f6f8551ce832e17162c1c96f43d09db14ff75b3cd0a6d25ed3a/zuban-0.0.24-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:845b8b58adce6ad90012e79fa2b4515f8748b486c4e4c36a06eb85c0798e5ed0", size = 25672343, upload-time = "2025-09-23T12:10:16.191Z" },
+    { url = "https://files.pythonhosted.org/packages/4d/c9/81e70c23829f9b22dfa80babf5fc2660c63386f2b37bde52d7b5b00ef744/zuban-0.0.24-py3-none-win32.whl", hash = "sha256:7542e78770e93c8a9c29320b00e3169e6c8dcb8a9957b1150377541ee6ef0177", size = 8149585, upload-time = "2025-09-23T12:10:18.784Z" },
+    { url = "https://files.pythonhosted.org/packages/65/96/8e7c916ae7673e1b834226bddb7b3d6b63efbc434f3d1bfb0aa2894664be/zuban-0.0.24-py3-none-win_amd64.whl", hash = "sha256:ef88eb0932ce00adcfbc4d0c1c9dccaf233aec55029a407e335e59e3727137a8", size = 8627429, upload-time = "2025-09-23T12:10:20.486Z" },
 ]
