@@ -1,4 +1,4 @@
-from typing import Any
+from typing import override
 
 from sqlmodel import String, cast, or_, select
 
@@ -15,18 +15,26 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         statement = select(User).where(User.email == email)
         return db.exec(statement).first()
 
+    @override
     def create(self, db: SessionDep, *, obj_in: UserCreate) -> User:
         """Crear nuevo usuario con password hasheado"""
         obj_in_data = obj_in.model_dump(exclude_unset=True)
-        obj_in_data["password"] = get_password_hash(obj_in_data.pop("password"))
-        db_obj = User(**obj_in_data)
+        password_raw = obj_in_data.pop("password", "")
+        password = str(password_raw) if password_raw else ""
+        obj_in_data["password"] = get_password_hash(password)
+        db_obj = User(**obj_in_data)  # type: ignore[misc]
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
         return db_obj
 
+    @override
     def update(
-        self, db: SessionDep, *, db_obj: User, obj_in: UserUpdate | dict[str, Any]
+        self,
+        db: SessionDep,
+        *,
+        db_obj: User,
+        obj_in: UserUpdate | dict[str, str | int | bool | None],
     ) -> User:
         """Actualizar usuario con manejo especial de password"""
         if isinstance(obj_in, dict):
@@ -35,9 +43,10 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             update_data = obj_in.model_dump(exclude_unset=True)
 
         if "password" in update_data:
-            update_data["hashed_password"] = get_password_hash(
-                update_data.pop("password")
-            )
+            password_value = update_data.pop("password", "")
+            if password_value:  # Only hash if password is provided
+                password = str(password_value)
+                update_data["password"] = get_password_hash(password)
 
         return super().update(db, db_obj=db_obj, obj_in=update_data)
 
@@ -99,7 +108,6 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         )
         return list(db.exec(statement).all())
 
-    # Update all calls to get(..., id=...) to get(..., obj_id=...)
     def get_user_by_id(self, db: SessionDep, user_id: int) -> User | None:
         """Get a specific user by id using obj_id argument."""
         return self.get(db, obj_id=user_id)
