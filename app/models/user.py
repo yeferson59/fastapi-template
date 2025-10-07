@@ -1,10 +1,9 @@
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field
 
 from app.core.models import SQLModelWithId
 
 
-class User(SQLModelWithId, SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
+class User(SQLModelWithId, table=True):
     email: str = Field(unique=True, index=True)
     is_active: bool = Field(default=True)
     is_superuser: bool = Field(default=False)
