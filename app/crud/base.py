@@ -1,4 +1,4 @@
-from typing import Any, TypeVar
+from typing import TypeVar
 
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
@@ -12,7 +12,11 @@ CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
 UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
 
 
-class CRUDBase[ModelType, CreateSchemaType, UpdateSchemaType]:
+class CRUDBase[
+    ModelType: SQLModelWithId,
+    CreateSchemaType: BaseModel,
+    UpdateSchemaType: BaseModel,
+]:
     def __init__(self, model: type[ModelType]):
         """
         CRUD object with default methods to Create, Read, Update, Delete (CRUD).
@@ -20,9 +24,9 @@ class CRUDBase[ModelType, CreateSchemaType, UpdateSchemaType]:
         * `model`: A SQLModel model class
         * `schema`: A Pydantic model (schema) class
         """
-        self.model = model
+        self.model: type[ModelType] = model
 
-    def get(self, db: SessionDep, obj_id: Any) -> ModelType | None:
+    def get(self, db: SessionDep, obj_id: str | int) -> ModelType | None:
         """Obtener un registro por ID"""
         statement = select(self.model).where(self.model.id == obj_id)  # type: ignore[attr-defined]
         return db.exec(statement).first()
@@ -36,8 +40,8 @@ class CRUDBase[ModelType, CreateSchemaType, UpdateSchemaType]:
 
     def create(self, db: SessionDep, *, obj_in: CreateSchemaType) -> ModelType:
         """Crear un nuevo registro"""
-        obj_in_data = jsonable_encoder(obj_in)
-        db_obj = self.model(**obj_in_data)
+        obj_in_data = jsonable_encoder(obj_in)  # type: ignore[misc]
+        db_obj = self.model(**obj_in_data)  # type: ignore[misc]
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
@@ -48,18 +52,23 @@ class CRUDBase[ModelType, CreateSchemaType, UpdateSchemaType]:
         db: SessionDep,
         *,
         db_obj: ModelType,
-        obj_in: UpdateSchemaType | dict[str, Any],
+        obj_in: UpdateSchemaType | dict[str, str | int | bool | None],
     ) -> ModelType:
         """Actualizar un registro existente"""
-        obj_data = jsonable_encoder(db_obj)
-        if isinstance(obj_in, dict):
-            update_data = obj_in
-        else:
-            update_data = obj_in.model_dump(exclude_unset=True)  # type: ignore[attr-defined]
+        obj_data = jsonable_encoder(db_obj)  # type: ignore[misc]
 
-        for field in obj_data:
-            if field in update_data:
-                setattr(db_obj, field, update_data[field])
+        if isinstance(obj_in, dict):
+            update_data = obj_in  # type: ignore[misc]
+        elif hasattr(obj_in, "model_dump"):
+            # Check if obj_in has model_dump method (Pydantic model)
+            update_data = obj_in.model_dump(exclude_unset=True)  # type: ignore[attr-defined,misc]
+        else:
+            # Fallback to jsonable_encoder
+            update_data = jsonable_encoder(obj_in)  # type: ignore[misc]
+
+        for field_name in obj_data:  # type: ignore[misc]
+            if field_name in update_data:  # type: ignore[misc]
+                setattr(db_obj, field_name, update_data[field_name])  # type: ignore[misc]
 
         db.add(db_obj)
         db.commit()
@@ -78,9 +87,10 @@ class CRUDBase[ModelType, CreateSchemaType, UpdateSchemaType]:
     def count(self, db: SessionDep) -> int:
         """Contar total de registros"""
         statement = select(self.model)
-        return len(list(db.exec(statement).all()))
+        results = db.exec(statement).all()
+        return len(list(results))
 
-    def exists(self, db: SessionDep, obj_id: Any) -> bool:
+    def exists(self, db: SessionDep, object_id: str | int) -> bool:
         """Verificar si existe un registro por ID"""
-        statement = select(self.model).where(self.model.id == obj_id)  # type: ignore[attr-defined]
+        statement = select(self.model).where(self.model.id == object_id)  # type: ignore[attr-defined]
         return db.exec(statement).first() is not None
