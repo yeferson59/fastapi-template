@@ -1,4 +1,6 @@
-FROM ghcr.io/astral-sh/uv:python3.13-alpine AS base
+FROM python:3.13.7-alpine AS base
+
+ADD https://astral.sh/uv/0.9.1/install.sh /uv-installer.sh
 
 # Common environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -23,7 +25,8 @@ WORKDIR /app
 COPY pyproject.toml uv.lock ./
 
 # Install dependencies and clean up in a single layer
-RUN uv sync --frozen --no-dev --no-cache \
+RUN mkdir -p .venv && \
+  uv sync --frozen --no-dev --no-cache \
   && find /app/.venv -name "*.pyc" -delete \
   && find /app/.venv -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true \
   && find /app/.venv -name "*.pyo" -delete \
