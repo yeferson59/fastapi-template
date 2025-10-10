@@ -1,4 +1,4 @@
-FROM ghcr.io/astral-sh/uv:python3.13.7-alpine AS base
+FROM ghcr.io/astral-sh/uv:python3.13-alpine AS base
 
 # Common environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
