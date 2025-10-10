@@ -1,6 +1,4 @@
-FROM python:3.13.7-alpine AS base
-
-ADD https://astral.sh/uv/0.9.1/install.sh /uv-installer.sh
+FROM ghcr.io/astral-sh/uv:python3.13-alpine AS base
 
 # Common environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -26,13 +24,13 @@ COPY pyproject.toml uv.lock ./
 
 # Install dependencies and clean up in a single layer
 RUN mkdir -p .venv && \
-  uv sync --frozen --no-dev --no-cache \
-  && find /app/.venv -name "*.pyc" -delete \
-  && find /app/.venv -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true \
-  && find /app/.venv -name "*.pyo" -delete \
-  && find /app/.venv -type d -name "tests" -exec rm -rf {} + 2>/dev/null || true \
-  && find /app/.venv -type d -name "test" -exec rm -rf {} + 2>/dev/null || true \
-  && apk del .build-deps
+  uv sync --frozen --no-dev --no-cache && \
+  find /app/.venv -name "*.pyc" -delete && \
+  find /app/.venv -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true && \
+  find /app/.venv -name "*.pyo" -delete && \
+  find /app/.venv -type d -name "tests" -exec rm -rf {} + 2>/dev/null || true && \
+  find /app/.venv -type d -name "test" -exec rm -rf {} + 2>/dev/null || true && \
+  apk del .build-deps
 
 # Stage 2: Runtime
 FROM base AS runtime
@@ -57,7 +55,7 @@ COPY --from=builder --chown=appuser:appgroup /app/.venv /app/.venv
 ENV VIRTUAL_ENV=/app/.venv \
   PATH="/app/.venv/bin:$PATH" \
   WORKERS=1 \
-  PORT=8000 \
+  PORT=8080 \
   LOG_LEVEL=info
 
 # Copy application code
