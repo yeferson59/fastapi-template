@@ -39,7 +39,7 @@ dev = [
     "pre-commit>=4.3.0",
     "pytest>=9.0.3",
     "ruff>=0.15.17",
-    "zuban>=0.0.24",
+    "zuban>=0.8.2",
 ]
 
 [tool.black]
