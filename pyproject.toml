@@ -26,7 +26,7 @@ requires-python = ">=3.13"
 dependencies = [
     "bcrypt>=3.2.2",
     "fastapi[all]>=0.141.1",
-    "pwdlib[argon2]>=0.3.0",
+    "pwdlib[argon2]>=0.3.1",
     "python-dotenv>=1.1.1",
     "sqlalchemy>=2.0.51",
     "sqlmodel>=0.0.39",
