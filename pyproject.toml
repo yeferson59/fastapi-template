@@ -34,7 +34,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "black>=26.5.1",
+    "black>=26.10.1",
     "isort>=6.1.0",
     "pre-commit>=4.6.2",
     "pytest>=9.1.1",
